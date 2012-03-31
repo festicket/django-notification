@@ -1,3 +1,4 @@
+import logging
 import datetime
 
 try:
@@ -9,7 +10,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.core.urlresolvers import reverse
 from django.template import Context
 from django.template.loader import render_to_string
@@ -248,7 +249,7 @@ def get_formatted_messages(formats, label, context):
     return format_templates
 
 
-def send_now(users, label, extra_context=None, on_site=True, sender=None):
+def send_now(users, label, extra_context=None, on_site=True, sender=None, attachments=None):
     """
     Creates a new notice.
     
@@ -324,7 +325,26 @@ def send_now(users, label, extra_context=None, on_site=True, sender=None):
             notice_type=notice_type, on_site=on_site, sender=sender)
         if should_send(user, notice_type, "1") and user.email and user.is_active: # Email
             recipients.append(user.email)
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, recipients)
+
+        # --- Create message
+        message = EmailMessage(
+            subject=subject,
+            body=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=recipients,
+        )
+
+        # --- Attach files if required
+        if attachments:
+            for attachment in attachments:
+                try:
+                    message.attach_file(attachment)
+                except Exception, ex:
+                    logging.error(
+                        u"send_now(): Cannot attach file: %s" % attachment)
+
+        # --- Send
+        message.send()
     
     # reset environment to original language
     activate(current_language)

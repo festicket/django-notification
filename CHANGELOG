@@ -7,7 +7,7 @@ BI = backward incompatible change
  * Added NOTIFICATION_DEFAULT_FROM_EMAIL and NOTIFICATION_EMAIL_BACKEND
    settings to allow notifications to come from non-default email address
    or server.
-
+ * Added option to CC people on emails
 
 0.2.0
 -----

@@ -249,7 +249,7 @@ def get_formatted_messages(formats, label, context):
     return format_templates
 
 
-def send_now(users, label, extra_context=None, on_site=True, sender=None, attachments=None):
+def send_now(users, label, extra_context=None, on_site=True, sender=None, attachments=None, cc=None):
     """
     Creates a new notice.
     
@@ -332,6 +332,7 @@ def send_now(users, label, extra_context=None, on_site=True, sender=None, attach
             body=body,
             from_email=getattr(settings, 'NOTIFICATION_DEFAULT_FROM_EMAIL', settings.DEFAULT_FROM_EMAIL),
             to=recipients,
+            cc=cc,
             connection=getattr(settings, 'NOTIFICATION_EMAIL_BACKEND', None)
         )
 

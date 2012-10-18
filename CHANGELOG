@@ -1,5 +1,14 @@
 BI = backward incompatible change
 
+0.2.1dev(Festicket)
+----------------
+ * Added migrations for 0.2
+ * Django 1.4 compatibility
+ * Added NOTIFICATION_DEFAULT_FROM_EMAIL and NOTIFICATION_EMAIL_BACKEND
+   settings to allow notifications to come from non-default email address
+   or server.
+
+
 0.2.0
 -----
 

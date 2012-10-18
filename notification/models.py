@@ -325,13 +325,14 @@ def send_now(users, label, extra_context=None, on_site=True, sender=None, attach
             notice_type=notice_type, on_site=on_site, sender=sender)
         if should_send(user, notice_type, "1") and user.email and user.is_active: # Email
             recipients.append(user.email)
-
+            
         # --- Create message
         message = EmailMessage(
             subject=subject,
             body=body,
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email=getattr(settings, 'NOTIFICATION_DEFAULT_FROM_EMAIL', settings.DEFAULT_FROM_EMAIL),
             to=recipients,
+            connection=getattr(settings, 'NOTIFICATION_EMAIL_BACKEND', None)
         )
 
         # --- Attach files if required

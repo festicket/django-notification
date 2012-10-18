@@ -4,7 +4,11 @@ from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.syndication.views import Feed
+
+try:
+    from django.contrib.syndication.views import Feed # Django >= 1.4
+except ImportError:
+    from django.contrib.syndication.views import feed # Django <= 1.3
 
 from notification.models import *
 from notification.decorators import basic_auth_required, simple_basic_auth_callback

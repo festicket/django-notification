@@ -325,7 +325,6 @@ def send_now(users, label, extra_context=None, on_site=True, sender=None, attach
             notice_type=notice_type, on_site=on_site, sender=sender)
         if should_send(user, notice_type, "1") and user.email and user.is_active: # Email
             recipients.append(user.email)
-        print bcc if bcc is not None else getattr(settings, 'NOTIFICATION_DEFAULT_BCC_EMAILS', None)
         # --- Create message
         message = EmailMessage(
             subject=subject,
@@ -333,7 +332,7 @@ def send_now(users, label, extra_context=None, on_site=True, sender=None, attach
             from_email=getattr(settings, 'NOTIFICATION_DEFAULT_FROM_EMAIL', settings.DEFAULT_FROM_EMAIL),
             to=recipients,
             cc=cc,
-            bcc=bcc if bcc is not None else getattr(settings, 'NOTIFICATION_DEFAULT_BCC_EMAILS'),
+            bcc=bcc if bcc is not None else getattr(settings, 'NOTIFICATION_DEFAULT_BCC_EMAILS', None),
             connection=getattr(settings, 'NOTIFICATION_EMAIL_BACKEND', None)
         )
 
